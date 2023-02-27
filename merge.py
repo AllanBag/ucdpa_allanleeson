@@ -1,11 +1,7 @@
 import pandas as pd
-
 import matplotlib.pyplot as plt
-
 import numpy as np
-
 import seaborn as sns
-
 ###comments
 
 ca = pd.read_csv(r"D:\Datasets\Moby Bikes Historical Data\moby-bikes-historical-data-032021.csv")
@@ -38,8 +34,6 @@ def bikeselect(bikeno, dataset):
     ###bikedata= pd.concat([bikedata1, bikedata2])
 
     return(bikedata)
-
-
 def journeys(bikeno, dataset):
     ###returns distance travelled and a very rough travel time
     locationdata = bikeselect(bikeno, dataset)
