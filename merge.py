@@ -7,7 +7,7 @@ import os
 
 ###comments
 
-path = 'C:\\Users\\Allan\PycharmProjects\mobyproject\\2022'
+path = 'C:\\Users\\Allan\PycharmProjects\mobyproject\\2021\\'
 csv_files = glob.glob(os.path.join(path, "*.csv"))
 
 # loop over the list of csv files
@@ -18,8 +18,16 @@ for f in csv_files:
     df = pd.read_csv(f)
     # append the content
     alldata = pd.concat([alldata, df])
+print(len(alldata))
+alldata.drop(alldata[alldata['Latitude'] == 0].index, inplace=True)
+
+alldata['Time'] = pd.to_datetime(alldata['HarvestTime'])
+alldata['Time'] = alldata['Time'].dt.hour
+print(len(alldata))
 
 
+def get_year(date):
+    return re.search(r"\d{4}", date).group(0)
 def bikeselect(bikeno, dataset):
     ######to find a given bikes journeys, and remove periods where the bike was stationary
     bikedata = dataset.loc[dataset['BikeID'] == bikeno]
@@ -49,15 +57,23 @@ def journeys(bikeno, dataset):
                      left_index=True)).dropna()
     diff['distance'] = [np.sqrt(x ** 2 + y ** 2) for x, y in zip(diff['Latitude'], diff['Longitude'])]
 
-    diff.drop(diff[diff['distance'] <= 200].index, inplace=True)
+    diff.drop(diff[diff['distance'] <= 100].index, inplace=True)
     diff.drop(diff[diff['distance'] >= 100000].index, inplace=True)
 
     return diff['distance']
 
 
-tester = journeys(36, alldata)
-print(tester)
+alljourneysinyear = pd.DataFrame()
+allbikes= alldata['BikeID'].unique()
+print(allbikes)
+
+for bike in allbikes:
+    bikeselected = journeys(bike,alldata)
+    bikeselected = pd.DataFrame(bikeselected)
+    alljourneysinyear = pd.concat([bikeselected, alljourneysinyear], axis=0)
 
 
-plt.hist(tester, bins=100)
+plt.hist(alljourneysinyear, bins=40)
 plt.show()
+
+print()
