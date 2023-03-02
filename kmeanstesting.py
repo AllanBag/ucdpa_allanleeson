@@ -3,14 +3,13 @@ import matplotlib.pyplot as plt
 import geopandas as gpd
 import osmnx as ox
 import numpy as np
-import seaborn as sns
 import glob
+from sklearn.cluster import KMeans
 import os
 
 
 ###pull the dublin shape file
 gdf = ox.geocode_to_gdf({'city': 'Dublin'})
-
 
 #define where to find the datasets
 path = 'C:\\Users\\Allan\PycharmProjects\mobyproject\\2022'
@@ -39,6 +38,32 @@ print(len(alldata))
 gdf.plot(color="lightgrey")
 plt.scatter(alldata['Longitude'],alldata['Latitude'], s=5, marker='.')
 plt.show()
+print(alldata)
+
+x=pd.DataFrame()
+x['Longitude']= alldata['Longitude']
+x['Latitude'] = alldata['Latitude']
+
+print(x)
 
 
 
+####Elbow test- Find optimal cluster amount
+#initialize kmeans parameters
+kmeans_kwargs = {
+"init": "random",
+"n_init": 10,
+"random_state": 1,
+}
+#create list to hold SSE values for each k
+sse = []
+for k in range(1, 11):
+    kmeans = KMeans(n_clusters=k, **kmeans_kwargs)
+    kmeans.fit(x)
+    sse.append(kmeans.inertia_)
+#visualize results
+plt.plot(range(1, 11), sse)
+plt.xticks(range(1, 11))
+plt.xlabel("Number of Clusters")
+plt.ylabel("SSE")
+plt.show()
