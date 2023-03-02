@@ -1,13 +1,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 import glob
 import os
-
+import re
+import statistics as stat
 ###comments
 
-path = 'C:\\Users\\Allan\PycharmProjects\mobyproject\\2021\\'
+path = 'C:\\Users\\Allan\PycharmProjects\mobyproject\\2020\\'
 csv_files = glob.glob(os.path.join(path, "*.csv"))
 
 # loop over the list of csv files
@@ -24,7 +24,6 @@ alldata.drop(alldata[alldata['Latitude'] == 0].index, inplace=True)
 alldata['Time'] = pd.to_datetime(alldata['HarvestTime'])
 alldata['Time'] = alldata['Time'].dt.hour
 print(len(alldata))
-
 
 def get_year(date):
     return re.search(r"\d{4}", date).group(0)
@@ -65,7 +64,6 @@ def journeys(bikeno, dataset):
 
 alljourneysinyear = pd.DataFrame()
 allbikes= alldata['BikeID'].unique()
-print(allbikes)
 
 for bike in allbikes:
     bikeselected = journeys(bike,alldata)
@@ -73,7 +71,17 @@ for bike in allbikes:
     alljourneysinyear = pd.concat([bikeselected, alljourneysinyear], axis=0)
 
 
-plt.hist(alljourneysinyear, bins=40)
+avjourney = int(np.mean(alljourneysinyear['distance']))
+stdjourney = int(np.var(alljourneysinyear['distance']))
+
+###pull out the year from the dataset
+year = get_year(alldata['HarvestTime'].iloc[5])
+print(year)
+
+####putting it together
+plt.hist(alljourneysinyear, bins=30)
+plt.xlabel('Metres')
+plt.ylabel('Number of Journeys')
 plt.show()
 
-print()
+print('In '+ str(year)+' the mean journey length was ' +str(avjourney)+'with standard deviation '+str(stdjourney))
