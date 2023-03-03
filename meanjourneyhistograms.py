@@ -7,7 +7,7 @@ import re
 import statistics as stat
 ###comments
 
-path = 'C:\\Users\\Allan\PycharmProjects\mobyproject\\2020\\'
+path = 'C:\\Users\\Allan\PycharmProjects\mobyproject\\2022\\'
 csv_files = glob.glob(os.path.join(path, "*.csv"))
 
 # loop over the list of csv files
@@ -81,4 +81,4 @@ plt.xlabel('Metres')
 plt.ylabel('Number of Journeys')
 plt.show()
 
-print('In '+ str(year)+' the mean journey length was ' +str(avjourney)+'with variance '+str(stdjourney))
+print('In '+ str(year)+' the mean journey length was ' +str(avjourney)+' km with variance '+str(stdjourney))
