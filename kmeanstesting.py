@@ -22,6 +22,14 @@ for f in csv_files:
     # append the content
     alldata = pd.concat([alldata, df])
 
+#path = 'C:\\Users\\Allan\PycharmProjects\mobyproject\\2021'
+#csv_files = glob.glob(os.path.join(path, "*.csv"))
+
+for f in csv_files:
+    # read the csv file
+    df = pd.read_csv(f)
+    # append the content
+    alldata = pd.concat([alldata, df])
 
 ###remove bikes reading lat 0, long 0
 alldata.drop(alldata[alldata['Latitude'] == 0].index, inplace=True)
@@ -44,9 +52,6 @@ x=pd.DataFrame()
 x['Longitude']= alldata['Longitude']
 x['Latitude'] = alldata['Latitude']
 
-print(x)
-
-
 
 ####Elbow test- Find optimal cluster amount
 #initialize kmeans parameters
@@ -64,6 +69,21 @@ for k in range(1, 11):
 #visualize results
 plt.plot(range(1, 11), sse)
 plt.xticks(range(1, 11))
-plt.xlabel("Number of Clusters")
+plt.xlabel("No of Clusters")
 plt.ylabel("SSE")
+plt.show()
+
+#####kmeans test- n_clusters being number of clusters
+kmeans = KMeans(n_clusters=3)
+kmeans.fit(x)
+
+#get cluster centres
+gdf.plot(color="lightgrey")
+centroids = kmeans.cluster_centers_
+centroids_x = centroids[:,0]
+centroids_y = centroids[:,1]
+
+####plot it all
+plt.scatter(alldata['Longitude'],alldata['Latitude'], s=5, marker='.')
+plt.scatter(centroids_x, centroids_y, marker='h', color = 'red')
 plt.show()
