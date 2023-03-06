@@ -42,55 +42,22 @@ alldata['Time'] = alldata['Time'].dt.hour
 alldata = alldata.loc[alldata['Time'] ==20]
 print(len(alldata))
 
-####plot the shape of dublin, then the resulting data
-gdf.plot(color="lightgrey")
-plt.scatter(alldata['Longitude'],alldata['Latitude'], s=5, marker='.')
-plt.show()
-print(alldata)
-
 x=pd.DataFrame()
 x['Longitude']= alldata['Longitude']
 x['Latitude'] = alldata['Latitude']
 
+#####kmeans test- n_clusters being number of clusters
+kmeans = KMeans(n_clusters=2)
+kmeans.fit(x)
 
-####Elbow test- Find optimal cluster amount
-#initialize kmeans parameters
-kmeans_kwargs = {
-"init": "random",
-"n_init": 10,
-"random_state": 1,
-}
-#create list to hold SSE values for each k
-sse = []
-for k in range(1, 11):
-    kmeans = KMeans(n_clusters=k, **kmeans_kwargs)
-    kmeans.fit(x)
-    sse.append(kmeans.inertia_)
-#visualize results
-plt.plot(range(1, 11), sse)
-plt.xticks(range(1, 11))
-plt.xlabel("No of Clusters")
-plt.ylabel("SSE")
-plt.show()
-
-#####kmeans test- n_clusters being number of clusters recommended by the elbow test (3)
-kmeans = KMeans(n_clusters=3)
-kmeans.fit_predict(x)
-
-###acquire anomaly score- ie, the minimum distance between a given point and the nearest cluster. becomes very apparent if we increase the amount of clusters
-x['anomaly'] = kmeans.transform(x).min(axis=1)
-
-#get cluster centres and plot the dublin map
+#get cluster centres
 gdf.plot(color="lightgrey")
 centroids = kmeans.cluster_centers_
 centroids_x = centroids[:,0]
 centroids_y = centroids[:,1]
-print(x)
 
 ####plot it all
-plt.scatter(x['Longitude'], x['Latitude'], c=x['anomaly'], cmap='coolwarm', s=6)
-plt.xlabel('Longitude')
-plt.ylabel('Latitude')
+plt.scatter(alldata['Longitude'],alldata['Latitude'], s=5, marker='.')
 plt.scatter(centroids_x, centroids_y, marker='h', color = 'red')
-plt.colorbar(label = 'Anomaly Score')
 plt.show()
+
