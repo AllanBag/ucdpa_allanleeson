@@ -26,8 +26,11 @@ alldata['Time'] = pd.to_datetime(alldata['HarvestTime'])
 alldata['Time'] = alldata['Time'].dt.hour
 print(len(alldata))
 
+####to check given date across all dataset if necessary, pulls out the year from all harvesttime filestamps. Should be consistent across all rows if you're pulling the year's data
+###My apologies, I really didn't find a use case for a Regex in this project!
 def get_year(date):
     return re.search(r"\d{4}", date).group(0)
+
 def bikeselect(bikeno, dataset):
     ######to find a given bikes journeys, and remove periods where the bike was stationary
     bikedata = dataset.loc[dataset['BikeID'] == bikeno]
