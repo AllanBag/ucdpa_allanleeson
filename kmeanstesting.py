@@ -89,8 +89,8 @@ print(x)
 
 ####plot it all
 plt.scatter(x['Longitude'], x['Latitude'], c=x['anomaly'], cmap='coolwarm', s=6)
+plt.colorbar(label = 'Anomaly Score')
 plt.xlabel('Longitude')
 plt.ylabel('Latitude')
 plt.scatter(centroids_x, centroids_y, marker='h', color = 'red')
-plt.colorbar(label = 'Anomaly Score')
 plt.show()
