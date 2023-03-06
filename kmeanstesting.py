@@ -75,15 +75,19 @@ plt.show()
 
 #####kmeans test- n_clusters being number of clusters
 kmeans = KMeans(n_clusters=3)
-kmeans.fit(x)
+kmeans.fit_predict(x)
+
+###acquire anomaly score- ie, the minimum distance between a given point and the nearest cluster. becomes very apparent if we increase the amount of clusters
+x['anomaly'] = kmeans.transform(x).min(axis=1)
 
 #get cluster centres
 gdf.plot(color="lightgrey")
 centroids = kmeans.cluster_centers_
 centroids_x = centroids[:,0]
 centroids_y = centroids[:,1]
-
+print(x)
 ####plot it all
-plt.scatter(alldata['Longitude'],alldata['Latitude'], s=5, marker='.')
+plt.scatter(x['Longitude'], x['Latitude'], c=x['anomaly'], cmap='coolwarm', s=6)
 plt.scatter(centroids_x, centroids_y, marker='h', color = 'red')
+plt.colorbar(label = 'Anomaly Score')
 plt.show()
