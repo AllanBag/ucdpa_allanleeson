@@ -1,6 +1,0 @@
-####https://data.smartdublin.ie/mobybikes-api
-###likely will just use to call current data to compare to historical
-
-import requests
-
-recentcall = requests.get('https://data.smartdublin.ie/mobybikes-api')
