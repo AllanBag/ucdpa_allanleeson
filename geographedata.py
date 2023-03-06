@@ -8,7 +8,7 @@ import glob
 import os
 
 
-###pull the dublin shape file
+###pull the dublin shape file from osmnx
 gdf = ox.geocode_to_gdf({'city': 'Dublin'})
 
 
