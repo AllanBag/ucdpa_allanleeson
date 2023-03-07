@@ -7,7 +7,7 @@ import re
 import statistics as stat
 ###comments
 
-path = 'C:\\Users\\Allan\PycharmProjects\mobyproject\\2022\\'
+path = 'C:\\Users\\Allan\PycharmProjects\mobyproject\\2020\\'
 csv_files = glob.glob(os.path.join(path, "*.csv"))
 
 # loop over the list of csv files
@@ -72,7 +72,7 @@ for bike in allbikes:
     alljourneysinyear = pd.concat([bikeselected, alljourneysinyear], axis=0)
 
 ###get the mean journey and variance
-avjourney = int(np.mean(alljourneysinyear['distance']))
+avjourney = int(np.median(alljourneysinyear['distance']))
 stdjourney = int(np.var(alljourneysinyear['distance']))
 
 ###pull out the year from the dataset
@@ -84,4 +84,6 @@ plt.xlabel('Metres')
 plt.ylabel('Number of Journeys')
 plt.show()
 
-print('In '+ str(year)+' the mean journey length was ' +str(avjourney)+' km with variance '+str(stdjourney))
+
+
+print('In '+ str(year)+' the mean journey length was ' +str(avjourney)+' m with variance '+str(stdjourney))
